@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>La app mágica</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: black;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      user-select: none;
+    }
+    #card {
+      display: none;
+      font-size: 3em;
+    }
+  </style>
+</head>
+<body onclick="handleTouch(event)">
+  <div id="message">Estoy leyendo tu mente...</div>
+  <div id="card"></div>
+
+  <script>
+    let suit = '';
+    let value = 0;
+    let centerTaps = 0;
+
+    function handleTouch(e) {
+      const x = e.clientX;
+      const y = e.clientY;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      // Esquinas para seleccionar palo
+      if (x < w/3 && y < h/3) {
+        suit = '♥️'; // superior izquierda
+      } else if (x > 2*w/3 && y < h/3) {
+        suit = '♠️'; // superior derecha
+      } else if (x < w/3 && y > 2*h/3) {
+        suit = '♦️'; // inferior izquierda
+      } else if (x > 2*w/3 && y > 2*h/3) {
+        suit = '♣️'; // inferior derecha
+      } else {
+        centerTaps++;
+        if (centerTaps >= 1 && suit !== '') {
+          value = centerTaps;
+          revealCard();
+        }
+      }
+    }
+
+    function revealCard() {
+      const message = document.getElementById('message');
+      const card = document.getElementById('card');
+      const valueNames = {
+        1: 'A', 11: 'J', 12: 'Q', 13: 'K'
+      };
+      const valueDisplay = valueNames[value] || value;
+      message.style.display = 'none';
+      card.textContent = `${valueDisplay} ${suit}`;
+      card.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
